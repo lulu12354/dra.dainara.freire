@@ -1,60 +1,72 @@
-(function () {
-    // ==========================================
-    // 1. DADOS DO CLIENTE (MODO DE TESTE)
-    // ==========================================
-    const CONFIG = {
-        url: "https://cli-02-dainarafreire.frontlabstudio.workers.dev",
-        timeout: 2000, // Aumentado para 2000ms para garantir a entrega durante testes
-        cooldownHoras: 0 // ZERADO: Permite cliques contínuos sem bloqueio
+v(function () {
+  // ==========================================
+  // 1. DADOS DO CLIENTE (MODO DE TESTE)
+  // ==========================================
+  const CONFIG = {
+    url: "https://cli-02-dainarafreire.frontlabstudio.workers.dev",
+    cooldownHoras: 1, // ZERADO: Permite cliques contínuos sem bloqueio
+  };
+
+  // ==========================================
+  // 2. MOTOR RASTREADOR BLINDADO (OTIMIZADO)
+  // ==========================================
+  document.addEventListener("click", function (e) {
+    const target = e.target.closest('[data-track="true"]');
+    if (!target) return;
+
+    const coluna = target.getAttribute("data-coluna");
+    const href = target.getAttribute("href");
+    const isBlank = target.getAttribute("target") === "_blank";
+
+    if (!coluna) return;
+
+    // VERIFICAÇÃO DE TECLAS MODIFICADORAS (Protege o Ctrl+Click, Shift+Click, Middle Click)
+    const isModifiedEvent =
+      e.ctrlKey || e.shiftKey || e.metaKey || e.button === 1 || isBlank;
+    const ehLinkValido = href && !href.startsWith("#");
+
+    // Só previne o evento se for um clique normal na mesma guia e for um link válido
+    if (!isModifiedEvent && ehLinkValido) {
+      e.preventDefault();
+    }
+
+    const tempoBloqueioMs = CONFIG.cooldownHoras * 60 * 60 * 1000;
+    const storageKey = `fl_track_${coluna}`;
+    const lastClick = localStorage.getItem(storageKey);
+    const now = Date.now();
+
+    // FUNÇÃO DE NAVEGAÇÃO IMEDIATA (Hoisting)
+    const liberarNavegacao = () => {
+      if (!isModifiedEvent && ehLinkValido) {
+        window.location.href = href;
+      }
     };
 
-    // ==========================================
-    // 2. MOTOR RASTREADOR (TRAVAS REMOVIDAS)
-    // ==========================================
-    document.addEventListener("click", async function (e) {
-        const target = e.target.closest('[data-track="true"]');
-        if (!target) return;
+    // Verifica o Cooldown
+    if (lastClick && now - parseInt(lastClick) < tempoBloqueioMs) {
+      console.log(`[Frontlab] Cooldown ativo (${CONFIG.cooldownHoras}h).`);
+      liberarNavegacao();
+      return;
+    }
 
-        const coluna = target.getAttribute("data-coluna");
-        const href = target.getAttribute("href");
-        const isBlank = target.getAttribute("target") === "_blank";
+    // Atualiza Cooldown
+    localStorage.setItem(storageKey, now.toString());
 
-        if (!coluna) return;
-
-        if (!isBlank && href && href !== '#') {
-            e.preventDefault();
-        }
-
-        // [MUDANÇA]: Toda a lógica de bloqueio por localStorage (tempoBloqueioMs, lastClick) 
-        // foi completamente removida aqui para garantir 100% de passagem livre.
-        console.log(`[Frontlab Teste] Disparando evento para coluna: ${coluna}`);
-
-        try {
-            const fetchPromise = fetch(CONFIG.url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ [coluna]: 1 }),
-                keepalive: true
-            });
-
-            const timeoutPromise = new Promise((_, reject) =>
-                setTimeout(() => reject(new Error('Timeout')), CONFIG.timeout)
-            );
-
-            await Promise.race([fetchPromise, timeoutPromise]);
-            console.log(`[Frontlab Teste] Requisição disparada com sucesso!`);
-        } catch (err) {
-            console.warn("[Frontlab Teste] Timeout atingido ou log processado silenciosamente.");
-        } finally {
-            liberarNavegacao(isBlank, href);
-        }
+    // DISPARO "FIRE AND FORGET" (Garante performance 100%)
+    // Não usamos await para não bloquear a thread principal nem o redirecionamento.
+    // O keepalive cuida do envio em background enquanto a página descarrega.
+    fetch(CONFIG.url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ [coluna]: 1 }),
+      keepalive: true,
+    }).catch(() => {
+      // Falha silenciosa para não poluir o console do cliente
     });
 
-    function liberarNavegacao(isBlank, href) {
-        if (!isBlank && href && href !== '#') {
-            window.location.href = href;
-        }
-    }
+    // Redireciona o usuário IMEDIATAMENTE (Sensação de click instantâneo)
+    liberarNavegacao();
+  });
 })();
