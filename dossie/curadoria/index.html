@@ -31,9 +31,14 @@
     <meta name="twitter:image" content="https://dradainarafreire.com.br/shared/img/dainara/curadoria/dainara-02.jpg" />
 
     <!-- Preloads -->
-    <link rel="preload" as="image" href="/shared/img/dainara/curadoria/dainara-mobile-02.avif" media="(max-width: 768px)" fetchpriority="high" />
-    <link rel="preload" as="image" href="/shared/img/dainara/curadoria/dainara-02.avif" media="(min-width: 769px)" fetchpriority="high" />
-    <link rel="preload" as="style" href="assets/main.css" />
+    <!-- Otimização LCP: Pré-carrega a imagem principal com prioridade máxima. O href DEVE ser idêntico ao srcset. -->
+    <link rel="preload" as="image" href="assets/midia/img/dainara/dainara-mobile-02.avif" media="(max-width: 768px)" fetchpriority="high" />
+    <link rel="preload" as="image" href="assets/midia/img/dainara/dainara-02.avif" media="(min-width: 769px)" fetchpriority="high" />
+    
+    <!-- Otimização de Renderização: Pré-carrega as fontes e o CSS para evitar bloqueios. -->
+    <link rel="preload" href="assets/fonts/inter-variable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/cormorant-garamond-italic.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" as="style" href="assets/main.css" fetchpriority="high" />
 
     <!-- Favicon e Ícones -->
     <link rel="icon" href="/shared/svg/favicon.png" type="image/png" />
@@ -136,6 +141,7 @@
               height="1080"
               loading="eager"
               fetchpriority="high"
+              decoding="sync"
             />
           </picture>
         </div>
@@ -180,6 +186,9 @@
                 src="assets/midia/img/site/card-destaques.webp"
                 alt="Resultados de harmonização facial e bioestimuladores"
                 class="index-card-hero__image"
+                width="480"
+                height="240"
+                decoding="async"
                 loading="lazy"
               />
             </div>
@@ -270,6 +279,8 @@
             muted
             playsinline
             preload="none"
+            width="1920"
+            height="1080"
             poster="assets/midia/video/poster.webp"
           >
             <source
@@ -279,11 +290,13 @@
             />
             <source
               src="assets/midia/video/hero-desktop-01.webm"
-              type="video/mp4"
+              type="video/webm"
+              media="(min-width: 769px)"
             />
-             <source
+            <source
               src="assets/midia/video/hero-desktop-01.mp4"
               type="video/mp4"
+              media="(min-width: 769px)"
             />
             Seu navegador não suporta a visualização deste vídeo.
           </video>
@@ -731,7 +744,7 @@
         </div>
       </div>
     </footer>
-    <script src="/assets/tracker.js" defer></script>
+    <script src="/assets/tracker.js" defer fetchpriority="low"></script>
     <script src="assets/app.js" defer></script>
   </body>
 </html>

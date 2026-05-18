@@ -340,6 +340,9 @@ button {
     background-color: var(--cor-fundo);
     display: flex;
     justify-content: center;
+    /* Otimização de Renderização: Pula o desenho de elementos fora da tela */
+    content-visibility: auto;
+    contain-intrinsic-size: 500px;
 }
 
 .links-index__container {
@@ -518,6 +521,9 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
+    /* Otimização de Renderização: Pula o desenho de elementos fora da tela */
+    content-visibility: auto;
+    contain-intrinsic-size: 600px; /* Aproximadamente 70svh em um celular comum */
 }
 
 .video-experience__player {
@@ -620,24 +626,6 @@ button {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
 }
 
-/* Forçamos cores brilhantes por cima da cápsula escura */
-.video-experience__label {
-    display: block;
-    font-size: 0.6rem;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    color: var(--cor-texto);
-    /* Branco Off-white para estourar no fundo Onyx */
-}
-
-.video-experience__status {
-    font-family: var(--fonte-serif);
-    font-style: italic;
-    font-size: 0.9rem;
-    color: var(--cor-primaria);
-    /* Dourado sempre aceso */
-}
-
 .video-experience__label {
     display: block;
     font-size: 0.6rem;
@@ -718,11 +706,6 @@ button {
         display: none;
         /* Esconde o texto longo, mantendo apenas o On/Off */
     }
-
-    .video-experience__label {
-        display: none;
-    }
-
     .video-experience__label-group {
         padding: 4px 12px;
         /* Pílula um pouco menor no celular */
@@ -734,6 +717,9 @@ button {
     padding: var(--espaco-xl) 0 var(--espaco-2xl);
     background-color: var(--cor-fundo);
     overflow: hidden;
+    /* Otimização de Renderização: Pula o desenho de elementos fora da tela */
+    content-visibility: auto;
+    contain-intrinsic-size: 1000px;
 }
 
 .locations__header {
@@ -905,65 +891,42 @@ button {
         gap: var(--espaco-md);
     }
 
-    /* Remove a assimetria no mobile para salvar espaço */
+    /* Remove a assimetria de colunas no mobile */
     .location-card:nth-child(even) {
         margin-top: 0;
     }
 
+    /* --- Centralização de Elite no Mobile --- */
     .location-card {
-        border-radius: 0 12px 12px 0;
-        padding: var(--espaco-sm);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* Centraliza os blocos (conteúdo e botões) */
+        text-align: center;
+        /* Centraliza o texto (título e endereço) */
+        /* Ajuste de simetria: bordas iguais em todos os lados */
+        border-radius: 20px;
+        border-left: 1px solid var(--glass-border);
+        padding: var(--espaco-md) var(--espaco-sm);
     }
 
     .location-card:hover {
         transform: none;
-        /* Evita comportamentos estranhos no toque */
+        /* Desativa o deslize lateral no toque para evitar bugs */
     }
 
-    @media (max-width: 768px) {
-        .locations__grid {
-            grid-template-columns: 1fr;
-            gap: var(--espaco-md);
-        }
+    /* Garante que o número (01, 02...) também fique no meio */
+    .location-card__number {
+        margin-left: auto;
+        margin-right: auto;
+    }
 
-        /* Remove a assimetria de colunas no mobile */
-        .location-card:nth-child(even) {
-            margin-top: 0;
-        }
-
-        /* --- Centralização de Elite no Mobile --- */
-        .location-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            /* Centraliza os blocos (conteúdo e botões) */
-            text-align: center;
-            /* Centraliza o texto (título e endereço) */
-
-            /* Ajuste de simetria: bordas iguais em todos os lados */
-            border-radius: 20px;
-            border-left: 1px solid var(--glass-border);
-            padding: var(--espaco-md) var(--espaco-sm);
-        }
-
-        /* Garante que o número (01, 02...) também fique no meio */
-        .location-card__number {
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Centraliza os botões de ação (Maps, Uber, Copy) */
-        .location-card__actions {
-            justify-content: center;
-            width: 100%;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding-top: var(--espaco-sm);
-        }
-
-        .location-card:hover {
-            transform: none;
-            /* Desativa o deslize lateral no toque para evitar bugs */
-        }
+    /* Centraliza os botões de ação (Maps, Uber, Copy) */
+    .location-card__actions {
+        justify-content: center;
+        width: 100%;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding-top: var(--espaco-sm);
     }
 }
 
@@ -975,6 +938,9 @@ button {
     border-top: 1px solid rgba(191, 161, 115, 0.1);
     /* Divisor sutil em Dourado */
     text-align: center;
+    /* Otimização de Renderização: Pula o desenho de elementos fora da tela */
+    content-visibility: auto;
+    contain-intrinsic-size: 400px;
 }
 
 .footer__container {
