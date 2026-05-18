@@ -1,0 +1,20 @@
+# Arquivo de configuração para Netlify.
+# Define políticas de cache de longa duração para aumentar a performance.
+
+# Regra para HTML: Sempre revalidar com o servidor para garantir que o conteúdo esteja atualizado.
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Regra para todos os assets (CSS, JS, Imagens, Fontes, Vídeos)
+# Cache de 1 ano. A diretiva 'immutable' informa ao navegador que o arquivo nunca mudará.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/shared/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
