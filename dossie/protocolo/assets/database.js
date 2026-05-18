@@ -54,9 +54,9 @@ const clinicData = [
                 identity: { name: "Gabriela", quote: "O ossinho no nariz sempre me fez odiar fotos de perfil. Eu tentava esconder de todo jeito." },
                 clinical: { id: "ID_402", tech: "ANG_106.5°", laudo: "Retificação do dorso nasal com camuflagem de giba óssea e elevação da ponta." },
                 media: {
-                    bg: "assets/media/img/rinomodelacao/gabriela-antes",
-                    before: "assets/media/img/rinomodelacao/gabriela-antes",
-                    after: "assets/media/img/rinomodelacao/gabriela-depois",
+                    bg: "assets/midia/img/resultados/rinomodelacao/gabriela-antes",
+                    before: "assets/midia/img/resultados/rinomodelacao/gabriela-antes",
+                    after: "assets/midia/img/resultados/rinomodelacao/gabriela-depois",
                     combined: ""
                 }
             },
@@ -64,9 +64,9 @@ const clinicData = [
                 identity: { name: "Maria Eduarda", quote: "Fotos de perfil eram um desafio constante. O calo ósseo no nariz quebrava a harmonia que eu buscava." },
                 clinical: { id: "ID_400", tech: "ANG_106.5°", laudo: "Retificação do dorso nasal com camuflagem de giba óssea e elevação da ponta." },
                 media: {
-                    bg: "assets/media/img/rinomodelacao/maria-eduarda-antes",
-                    before: "assets/media/img/rinomodelacao/maria-eduarda-antes",
-                    after: "assets/media/img/rinomodelacao/maria-eduarda-depois",
+                    bg: "assets/midia/img/resultados/rinomodelacao/maria-eduarda-antes",
+                    before: "assets/midia/img/resultados/rinomodelacao/maria-eduarda-antes",
+                    after: "assets/midia/img/resultados/rinomodelacao/maria-eduarda-depois",
                     combined: ""
                 }
             }
@@ -83,9 +83,9 @@ const clinicData = [
                 identity: { name: "Tainá Cipriano", quote: "A sensação de flacidez no rosto me dava uma fisionomia cansada que não combinava com minha energia." },
                 clinical: { id: "ID_104", tech: "COL_300%", laudo: "Aplicação de bioestimulador de colágeno (Radiesse/Sculptra) focada no terço inferior para melhora da tração e firmeza tecidual." },
                 media: {
-                    bg: "assets/media/img/colageno/taina-cipriano-antes",
-                    before: "assets/media/img/colageno/taina-cipriano-antes",
-                    after: "assets/media/img/colageno/taina-cipriano-depois",
+                    bg: "assets/midia/img/resultados/colageno/taina-cipriano-antes",
+                    before: "assets/midia/img/resultados/colageno/taina-cipriano-antes",
+                    after: "assets/midia/img/resultados/colageno/taina-cipriano-depois",
                     combined: ""
                 }
             }
@@ -102,9 +102,9 @@ const clinicData = [
                 identity: { name: "Rafaela", quote: "Eu sentia que meu rosto estava derretendo com o tempo, parecia sempre cansada." },
                 clinical: { id: "ID_772", tech: "PHI_1.618", laudo: "Reestruturação do terço médio com 2ml de ácido hialurônico para sustentação malar, devolvendo o contorno perdido e eliminando o aspecto de cansaço." },
                 media: {
-                    bg: "assets/media/img/labial/rafaela-antes",
-                    before: "assets/media/img/labial/rafaela-antes",
-                    after: "assets/media/img/labial/rafaela-depois",
+                    bg: "assets/midia/img/resultados/labial/rafaela-antes",
+                    before: "assets/midia/img/resultados/labial/rafaela-antes",
+                    after: "assets/midia/img/resultados/labial/rafaela-depois",
                     combined: ""
                 }
             }
