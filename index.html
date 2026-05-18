@@ -10,8 +10,13 @@
     <meta name="theme-color" content="#FDFBF7">
     <link rel="canonical" href="https://dradainarafreire.com.br/">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="assets/main.css">
+    <!-- Otimização Etapa 4: Preconnect para Fontes do Google (Evita bloqueios e garante a identidade visual) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+    <!-- CSS Principal com Alta Prioridade -->
+    <link rel="stylesheet" href="assets/main.css" fetchpriority="high">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -33,8 +38,8 @@
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     
     <!-- Preloads -->
-    <link rel="preload" as="image" href="shared/img/img/principal/procedimento/img-hero.webp" fetchpriority="high">
-    <link rel="preload" as="style" href="assets/main.css">
+    <!-- Otimização LCP: Caminho corrigido para bater exatamente com o pôster do vídeo -->
+    <link rel="preload" as="image" href="assets/midia/img/site/img-hero.webp" type="image/webp" fetchpriority="high">
 
     <!-- Favicon e Ícones -->
     <link rel="icon" href="shared/svg/favicon.png" type="image/png">
@@ -123,7 +128,8 @@
         <section class="hero-video-section" id="inicio">
 
             <div class="video-background">
-                <video autoplay loop muted playsinline preload="auto" id="hero-video" poster="assets/midia/img/site/img-hero.webp"
+                <!-- Otimização TBT/LCP: preload="none" impede que o vídeo sufoque a rede 4G antes do texto aparecer -->
+                <video autoplay loop muted playsinline preload="none" id="hero-video" poster="assets/midia/img/site/img-hero.webp"
                     aria-label="Vídeo de apresentação da clínica Dra. Dainara Freire">
 
                     <source media="(max-width: 768px)" src="assets/midia/video/hero-mobile-02.webm" type="video/webm">
@@ -179,7 +185,7 @@
                             <picture class="card-bg">
                                 <source srcset="assets/midia/img/site/proc-1.avif" type="image/avif">
                                 <img src="assets/midia/img/site/proc-1.webp"
-                                    alt="Paciente após procedimento de Harmonização Facial" loading="lazy" width="800"
+                                    alt="Paciente após procedimento de Harmonização Facial" loading="lazy" decoding="async" width="800"
                                     height="450">
                             </picture>
                             <div class="card-overlay"></div>
@@ -210,7 +216,7 @@
                             <picture class="card-bg">
                                 <source srcset="assets/midia/img/site/proc-2.avif" type="image/avif">
                                 <img src="assets/midia/img/site/proc-2.webp" alt="Paciente com nariz alinhado após Rinomodelação"
-                                    loading="lazy" width="800" height="450">
+                                    loading="lazy" decoding="async" width="800" height="450">
                             </picture>
                             <div class="card-overlay"></div>
 
@@ -238,7 +244,7 @@
                             <picture class="card-bg">
                                 <source srcset="assets/midia/img/site/proc-3.avif" type="image/avif">
                                 <img src="assets/midia/img/site/proc-3.webp" alt="Pele firme com Bioestimuladores de Colágeno"
-                                    loading="lazy" width="800" height="450">
+                                    loading="lazy" decoding="async" width="800" height="450">
                             </picture>
                             <div class="card-overlay"></div>
 
@@ -268,7 +274,7 @@
                             <picture class="card-bg">
                                 <source srcset="assets/midia/img/site/proc-4.avif" type="image/avif">
                                 <img src="assets/midia/img/site/proc-4.webp" alt="Lábios hidratados com Preenchimento Labial"
-                                    loading="lazy" width="800" height="450">
+                                    loading="lazy" decoding="async" width="800" height="450">
                             </picture>
                             <div class="card-overlay"></div>
 
@@ -308,7 +314,7 @@
                         <picture class="manifesto-bg">
                             <source srcset="assets/midia/img/site/img-hero.avif" type="image/avif">
                             <img src="assets/midia/img/site/img-hero.webp" alt="Textura real de pele e beleza natural"
-                                loading="lazy" width="800" height="550">
+                                loading="lazy" decoding="async" width="800" height="550">
                         </picture>
 
                         <div class="manifesto-selo reveal-fade-up" style="--delay: 0.4s">
@@ -370,7 +376,7 @@
                             <picture class="especialista-foto">
                                 <source srcset="assets/midia/img/dainara/dainara.avif" type="image/avif">
                                 <img src="assets/midia/img/dainara/dainara.webp"
-                                    alt="Dra. Dainara Freire - Especialista em Harmonização" loading="lazy" width="600"
+                                    alt="Dra. Dainara Freire - Especialista em Harmonização" loading="lazy" decoding="async" width="600"
                                     height="800">
                             </picture>
 
@@ -568,7 +574,7 @@
                             <picture class="tech-bg">
                                 <source srcset="assets/midia/img/site/tecnologia-premium.avif" type="image/avif">
                                 <img src="assets/midia/img/site/tecnologia-premium.webp"
-                                    alt="Materiais premium e tecnologia em harmonização" loading="lazy" width="800"
+                                    alt="Materiais premium e tecnologia em harmonização" loading="lazy" decoding="async" width="800"
                                     height="450">
                             </picture>
                             <div class="tech-overlay"></div>
@@ -596,7 +602,7 @@
                         </div>
                         <p class="avaliacao-texto">"Eu tinha pavor de ficar artificial. A Dra. Dainara foi tão cuidadosa
                             e me explicou tudo com tanta clareza que me senti segura."</p>
-                        <div class="avaliacao-autor">
+                        <div class="avaliacao-autor" >
                             <img src="assets/midia/img/site/avatar-1.webp" alt="Mariana C." class="autor-avatar" loading="lazy"
                                 width="45" height="45">
                             <div class="autor-info">
@@ -611,7 +617,7 @@
                         </div>
                         <p class="avaliacao-texto">"Ambiente impecável e atendimento de primeiríssima linha. Os
                             bioestimuladores devolveram a firmeza do meu rosto."</p>
-                        <div class="avaliacao-autor">
+                        <div class="avaliacao-autor" >
                             <img src="assets/midia/img/site/avatar-2.webp" alt="Laura Castro" class="autor-avatar" loading="lazy"
                                 width="45" height="45">
                             <div class="autor-info">
@@ -626,7 +632,7 @@
                             <div class="avaliacao-estrelas">★★★★★</div>
                         </div>
                         <p class="avaliacao-texto">"Estou encantada com o resultado! Ficou exatamente como eu queria: super natural e elegante. A Dra. Dainara tem mãos de fada."</p>
-                        <div class="avaliacao-autor">
+                        <div class="avaliacao-autor" >
                             <img src="assets/midia/img/site/avatar-3.webp" alt="Camila Rodrigues" class="autor-avatar" loading="lazy"
                                 width="45" height="45">
                             <div class="autor-info">
@@ -641,7 +647,7 @@
                             <div class="avaliacao-estrelas">★★★★★</div>
                         </div>
                         <p class="avaliacao-texto">"Sempre tive insegurança com meu perfil, e a rinomodelação mudou tudo. Procedimento rápido e a doutora me passou muita tranquilidade."</p>
-                        <div class="avaliacao-autor">
+                        <div class="avaliacao-autor" >
                             <img src="assets/midia/img/site/avatar-4.webp" alt="Juliana Mendes" class="autor-avatar" loading="lazy"
                                 width="45" height="45">
                             <div class="autor-info">
@@ -656,7 +662,7 @@
                             <div class="avaliacao-estrelas">★★★★★</div>
                         </div>
                         <p class="avaliacao-texto">"Senti minha pele muito mais firme e viçosa após as sessões. O melhor de tudo é que as pessoas notam que estou melhor, mas não percebem o que fiz!"</p>
-                        <div class="avaliacao-autor">
+                        <div class="avaliacao-autor" >
                             <img src="assets/midia/img/site/avatar-5.webp" alt="Beatriz Silva" class="autor-avatar" loading="lazy"
                                 width="45" height="45">
                             <div class="autor-info">
@@ -699,7 +705,7 @@
                                 <picture class="resultado-bg">
                                     <source srcset="assets/midia/img/resultados/resultado-1.avif" type="image/avif">
                                     <img src="assets/midia/img/resultados/resultado-1.webp" alt="Resultado de Harmonização Facial"
-                                        loading="lazy" width="540" height="960" class="img-zoomable">
+                                        loading="lazy" decoding="async" width="540" height="960" class="img-zoomable">
                                 </picture>
                                 <div class="resultado-overlay">
                                     <span class="icone-zoom" aria-hidden="true">
@@ -725,7 +731,7 @@
                                 <picture class="resultado-bg">
                                     <source srcset="assets/midia/img/resultados/resultado-2.avif" type="image/avif">
                                     <img src="assets/midia/img/resultados/resultado-2.webp" alt="Resultado de Preenchimento Labial"
-                                        loading="lazy" width="540" height="960" class="img-zoomable">
+                                        loading="lazy" decoding="async" width="540" height="960" class="img-zoomable">
                                 </picture>
                                 <div class="resultado-overlay">
                                     <span class="icone-zoom" aria-hidden="true">
@@ -751,7 +757,7 @@
                                 <picture class="resultado-bg">
                                     <source srcset="assets/midia/img/resultados/resultado-3.avif" type="image/avif">
                                     <img src="assets/midia/img/resultados/resultado-3.webp" alt="Resultado de Preenchimento Labial"
-                                        loading="lazy" width="540" height="960" class="img-zoomable">
+                                        loading="lazy" decoding="async" width="540" height="960" class="img-zoomable">
                                 </picture>
                                 <div class="resultado-overlay">
                                     <span class="icone-zoom" aria-hidden="true">
@@ -862,7 +868,7 @@
 
                 <div class="footer-brand">
                     <a href="#inicio" class="logo-footer" aria-label="Voltar ao Início">
-                        <img src="shared/svg/logo.png" alt="Dra. Dainara Freire" loading="lazy" width="120" height="34">
+                        <img src="shared/svg/logo.png" alt="Dra. Dainara Freire" loading="lazy" decoding="async" width="120" height="34">
                     </a>
                     <p class="footer-bio">Estética avançada com foco absoluto em segurança, naturalidade e resultados elegantes. Realce a sua melhor versão sem perder a essência.</p>
 
@@ -971,7 +977,7 @@
     </div>
 
     <script src="assets/app.js" defer></script>
-    <script src="assets/tracker.js" defer></script>
+    <script src="assets/tracker.js" defer fetchpriority="low"></script>
 </body>
 
 </html>

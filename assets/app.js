@@ -322,8 +322,15 @@ document.addEventListener('DOMContentLoaded', () => {
         animationId = requestAnimationFrame(playMarquee);
     }
 
-    // Inicia a animação
-    playMarquee();
+        // Otimização de TBT Extrema: Inicia o loop da animação SOMENTE quando a seção estiver próxima
+        const observerMarquee = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                playMarquee();
+                observerMarquee.disconnect(); // Otimiza a memória desligando após a primeira visualização
+            }
+        }, { rootMargin: '300px' }); // Ativa 300px antes de aparecer na tela
+        
+        observerMarquee.observe(slider);
 
     // 3. Eventos de Mouse (Desktop Drag & Drop)
     slider.addEventListener('mousedown', (e) => {
