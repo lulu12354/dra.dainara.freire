@@ -1,0 +1,1209 @@
+@charset "UTF-8";
+
+/* --- Fontes Otimizadas (Local e Swap) --- */
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 300 500;
+    /* Suporte a fontes variáveis se aplicar, senão declare separadamente */
+    font-display: swap;
+    /* IMPEDE O BLOQUEIO DE RENDERIZAÇÃO E FOIT */
+    src: url('../fonts/inter-variable.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Cormorant Garamond';
+    font-style: italic;
+    font-weight: 400;
+    font-display: swap;
+    /* Garante que o texto apareça imediatamente com uma fonte de fallback */
+    src: url('../fonts/cormorant-garamond-italic.woff2') format('woff2');
+}
+
+:root {
+    /* Cores - Transição para o Onyx & Gold */
+    --cor-fundo: #0A0A0A;
+    /* Preto Onyx profundo */
+    --cor-texto: #F4F4F4;
+    /* Off-white para evitar o cansaço visual do branco puro */
+    --cor-texto-muted: #888888;
+    /* Cinza para hierarquia secundária */
+    --cor-primaria: #BFA173;
+    /* Champagne Gold (mantido) */
+    --cor-detalhe: #1A1A1A;
+    /* Para superfícies de botões/cards escuros */
+
+    /* Fontes (Mantidas) */
+    --fonte-serif: 'Cormorant Garamond', 'Playfair Display', serif;
+    --fonte-sans: 'Inter', 'Helvetica Neue', sans-serif;
+    --fonte-padrao: var(--fonte-sans);
+
+    /* Glassmorphism Refinado para Fundo Escuro */
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-blur: blur(12px);
+
+    /* Container e Espaçamentos (Mantidos) */
+    --container-max: 1024px;
+    --espaco-xs: clamp(0.5rem, 1vw, 0.75rem);
+    --espaco-sm: clamp(1rem, 2vw, 1.5rem);
+    --espaco-md: clamp(2rem, 4vw, 3rem);
+    --espaco-lg: clamp(4rem, 8vw, 8rem);
+    --espaco-xl: clamp(6rem, 12vw, 12rem);
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    font-style: italic;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    overflow-wrap: break-word;
+    text-wrap: balance;
+}
+
+p {
+    overflow-wrap: break-word;
+    text-wrap: pretty;
+}
+
+html {
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100svh;
+    width: 100%;
+    overflow-x: hidden;
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    font-family: var(--fonte-padrao);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+    border: none;
+    background: none;
+    color: inherit;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+button {
+    cursor: pointer;
+}
+
+:focus-visible {
+    outline: 2px solid var(--cor-primaria);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+
+/* --- Seção Hero - Engenharia de Elite --- */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100svh;
+    /* Ocupa a tela cheia sempre, foco no mobile */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--cor-fundo);
+    /* O clip-path cria o contexto perfeito para o Parallax no mobile sem bugs de iOS */
+    clip-path: inset(0 0 0 0);
+}
+
+/* 1. Mídia e Efeito Parallax Absoluto */
+.hero__background-wrapper {
+    position: fixed;
+    /* Prende a imagem no fundo da tela */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    will-change: transform;
+}
+
+.hero__picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* A MÁGICA: Preenche 100% da tela sem esticar/deformar a foto (Padrão de Luxo) */
+    object-position: center 10%;
+    /* Trava o corte no topo (no rosto da Dra), escondendo apenas o corpo/fundo que não importa */
+    filter: grayscale(100%) brightness(0.8) contrast(1.1);
+    /* Animação de entrada cinematográfica (Zoom out suave) */
+    animation: heroImageReveal 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* 2. Textura de Grão de Filme (Ouro Envelhecido/Ruído) */
+.hero__grain {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    opacity: 0.04;
+    pointer-events: none;
+    /* Um ruído svg em base64 injetado diretamente no CSS para zero requisições extras */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* 3. Overlay Dinâmico de Contraste */
+.hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    /* Gradiente que protege a base da tela onde o texto ficará no mobile */
+    background: linear-gradient(180deg,
+            rgba(10, 10, 10, 0.1) 0%,
+            rgba(10, 10, 10, 0.4) 50%,
+            rgba(10, 10, 10, 0.9) 100%);
+}
+
+/* 4. Arquitetura do Conteúdo Centralizado */
+.hero__content {
+    position: relative;
+    z-index: 4;
+    width: 100%;
+    max-width: var(--container-max);
+    padding: 0 var(--espaco-md);
+    text-align: center;
+    /* O conteúdo entra de baixo para cima com fade */
+    opacity: 0;
+    transform: translateY(30px);
+    animation: heroTextReveal 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+}
+
+.hero__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--espaco-xs);
+}
+
+.hero__name {
+    font-family: var(--fonte-serif);
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    /* Aumentado para impacto monumental */
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--cor-texto);
+    /* Off-white no título principal */
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    /* Profundidade */
+}
+
+.hero__subtitle {
+    font-family: var(--fonte-sans);
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    /* Tracking generoso, luxo */
+    color: var(--cor-primaria);
+    /* Dourado transferido para o subtítulo */
+    margin-top: 8px;
+}
+
+.hero__subtitle--break {
+    display: block;
+}
+
+/* A Linha Editorial de Luxo */
+.hero__divider {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--cor-primaria), transparent);
+    margin: var(--espaco-sm) 0;
+    opacity: 0.6;
+}
+
+.hero__description {
+    font-family: var(--fonte-sans);
+    font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+    font-weight: 400;
+    color: var(--cor-texto-muted);
+    max-width: 45ch;
+    line-height: 1.6;
+}
+
+/* --- Keyframes (O "Sangue" Visual) --- */
+@keyframes heroImageReveal {
+    0% {
+        transform: scale(1.1);
+        filter: grayscale(100%) brightness(0.4) blur(10px);
+    }
+
+    100% {
+        transform: scale(1);
+        filter: grayscale(100%) brightness(0.8) blur(0px);
+    }
+}
+
+@keyframes heroTextReveal {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- RESPONSIVIDADE (Mobile-Focused) --- */
+@media (max-width: 768px) {
+    .hero__content {
+        padding: 0 var(--espaco-sm);
+        /* No celular, empurramos o bloco levemente para baixo para afastar do rosto da Doutora */
+        margin-top: 15vh;
+    }
+
+    .hero__subtitle--break {
+        display: inline;
+    }
+
+    .hero__divider {
+        height: 30px;
+    }
+
+    .hero__image {
+        object-position: center 15%;
+        /* No celular, trava o rosto exatamente no terço superior da tela */
+    }
+}
+
+/* secao 2*/
+/* --- Seção 2: O Index de Links (Revisitado) --- */
+.links-index {
+    padding: var(--espaco-lg) 0;
+    background-color: var(--cor-fundo);
+    display: flex;
+    justify-content: center;
+}
+
+.links-index__container {
+    width: 100%;
+    max-width: 480px;
+    /* Largura ideal para experiência mobile-first */
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaco-md);
+    padding: 0 var(--espaco-sm);
+}
+
+/* --- 1. O Card Hero (Portal de Curadoria) --- */
+.index-card-hero {
+    position: relative;
+    width: 100%;
+    height: 240px;
+    /* Altura imponente para o destaque */
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    border: 1px solid var(--glass-border);
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), border-color 0.4s ease;
+}
+
+.index-card-hero__image-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.index-card-hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) brightness(0.4);
+    /* P&B Editorial */
+    transition: transform 0.6s ease, filter 0.6s ease;
+}
+
+.index-card-hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(10, 10, 10, 0) 0%, rgba(10, 10, 10, 0.8) 100%);
+    z-index: 2;
+}
+
+.index-card-hero__content {
+    position: relative;
+    z-index: 3;
+    padding: var(--espaco-md);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.index-card-hero__label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--cor-primaria);
+}
+
+.index-card-hero__title {
+    font-family: var(--fonte-serif);
+    font-size: 1.6rem;
+    line-height: 1.1;
+    color: var(--cor-texto);
+}
+
+.index-card-hero__title em {
+    font-style: italic;
+    opacity: 0.8;
+}
+
+.index-card-hero__cta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--cor-texto-muted);
+    margin-top: 10px;
+    transition: color 0.3s ease;
+}
+
+.index-card-hero__cta svg {
+    width: 16px;
+    transition: transform 0.3s ease;
+}
+
+/* Hover Effects (Desktop & Mobile Touch) */
+.index-card-hero:active {
+    transform: scale(0.98);
+}
+
+@media (hover: hover) {
+    .index-card-hero:hover {
+        border-color: var(--cor-primaria);
+    }
+
+    .index-card-hero:hover .index-card-hero__image {
+        transform: scale(1.05);
+        filter: grayscale(100%) brightness(0.6);
+    }
+
+    .index-card-hero:hover .index-card-hero__cta {
+        color: var(--cor-texto);
+    }
+
+    .index-card-hero:hover .index-card-hero__cta svg {
+        transform: translateX(5px);
+    }
+}
+
+/* --- 2 & 3. Links Minimalistas --- */
+.index-link-minimal {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--espaco-md);
+    border-radius: 12px;
+    font-family: var(--fonte-sans);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.index-link-minimal--glass {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    color: var(--cor-texto-muted);
+}
+
+.index-link-minimal--solid {
+    background-color: var(--cor-primaria);
+    color: #000;
+    font-weight: 500;
+}
+
+.index-link-minimal__icon {
+    width: 18px;
+    opacity: 0.6;
+}
+
+.index-link-minimal:active {
+    transform: scale(0.97);
+}
+
+@media (hover: hover) {
+    .index-link-minimal--glass:hover {
+        color: var(--cor-texto);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+}
+
+/* --- Seção 3: Experiência Cinematográfica (Véu de Prata) --- */
+/* --- Seção 3: Experiência Cinematográfica (Protocolo Frontlab) --- */
+.video-experience {
+    position: relative;
+    width: 100%;
+    height: 70svh;
+    background-color: #000;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-experience__player {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Estado Inicial: O Véu de Prata */
+    filter: grayscale(100%) brightness(0.4) blur(8px);
+    transform: scale(1.05);
+    /* Leve zoom para suavizar o desfoque nas bordas */
+    transition: filter 1.5s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: filter, transform;
+}
+
+
+
+.video-experience__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(10, 10, 10, 0) 20%, rgba(10, 10, 10, 0.7) 100%);
+    z-index: 2;
+    transition: opacity 1s ease;
+    pointer-events: none;
+}
+
+
+
+.video-experience__toggle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: var(--cor-primaria);
+    /* Força bruta: Joga o botão por cima de tudo e garante o clique */
+    position: relative;
+    z-index: 99;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+/* Isso impede que o navegador ache que você clicou no desenho do compasso. O clique vai inteiro pro botão! */
+.video-experience__toggle * {
+    pointer-events: none;
+}
+
+.video-experience__compass {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    /* Borda mais espessa e background mais escuro para vencer o brilho do vídeo */
+    border: 1.5px solid var(--cor-primaria);
+    background: rgba(10, 10, 10, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s ease;
+    /* Sombra profunda para destacar o botão da mídia */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+}
+
+.video-experience__content {
+    position: absolute;
+    bottom: 60px;
+    /* Distância do chão no PC */
+    right: 60px;
+    /* Distância da direita no PC */
+    z-index: 10;
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.video-experience__needle {
+    width: 32px;
+    height: 32px;
+    transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.video-experience__label-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+
+    /* Cápsula de proteção contra fundos claros */
+    background: rgba(10, 10, 10, 0.8);
+    padding: 6px 14px;
+    border-radius: 100px;
+    /* Formato pílula luxuosa */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+}
+
+/* Forçamos cores brilhantes por cima da cápsula escura */
+.video-experience__label {
+    display: block;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--cor-texto);
+    /* Branco Off-white para estourar no fundo Onyx */
+}
+
+.video-experience__status {
+    font-family: var(--fonte-serif);
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--cor-primaria);
+    /* Dourado sempre aceso */
+}
+
+.video-experience__label {
+    display: block;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--cor-texto-muted);
+}
+
+.video-experience__status {
+    font-family: var(--fonte-serif);
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--cor-texto-muted);
+}
+
+/* --- 1. O Despertar Visual (Disparado pelo Scroll) --- */
+.video-experience--unveiled .video-experience__player {
+    filter: grayscale(0%) brightness(1) blur(0px);
+    transform: scale(1);
+}
+
+.video-experience--unveiled .video-experience__overlay {
+    opacity: 0.3;
+    /* Mantém um leve escurecimento para o compasso brilhar */
+}
+
+/* --- 2. O Despertar Sonoro (Disparado pelo Clique) --- */
+.video-experience--audio-on .video-experience__compass {
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 20px rgba(191, 161, 115, 0.2);
+}
+
+.video-experience--audio-on .video-experience__needle {
+    transform: rotate(180deg);
+}
+
+.video-experience--audio-on .video-experience__status {
+    color: var(--cor-primaria);
+}
+
+.video-experience__wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* --- Ajuste Milimétrico do Botão de Áudio (Mobile) --- */
+@media (max-width: 768px) {
+
+    /* 1. Resetamos o container para ele não brigar com o seu layout.css */
+    .video-experience__content {
+        position: static;
+    }
+
+    /* 2. Ancoragem Absoluta do Botão no Canto */
+    .video-experience__toggle {
+        position: absolute;
+        bottom: 30px;
+        /* Distância da base do vídeo */
+        right: 20px;
+        /* Distância da parede direita */
+        z-index: 99;
+    }
+
+    /* 3. Escala do ícone e reforço do fundo Onyx */
+    .video-experience__compass {
+        width: 56px;
+        height: 56px;
+        background: rgba(10, 10, 10, 0.8);
+        /* Fundo escuro super forte para garantir leitura */
+    }
+
+    /* 4. Limpeza Visual (Opcional no luxo para evitar poluição no canto) */
+    .video-experience__label {
+        display: none;
+        /* Esconde o texto longo, mantendo apenas o On/Off */
+    }
+
+    .video-experience__label {
+        display: none;
+    }
+
+    .video-experience__label-group {
+        padding: 4px 12px;
+        /* Pílula um pouco menor no celular */
+    }
+}
+
+/* --- Seção 4: Unidades (Cartões de Embarque) --- */
+.locations {
+    padding: var(--espaco-xl) 0 var(--espaco-2xl);
+    background-color: var(--cor-fundo);
+    overflow: hidden;
+}
+
+.locations__header {
+    text-align: left;
+    /* Alinhamento editorial à esquerda */
+    margin-bottom: var(--espaco-lg);
+    max-width: 600px;
+}
+
+
+/* --- Ajuste de Eixo: Cabeçalho Centralizado --- */
+.locations__header {
+    text-align: center;
+    /* Centraliza o texto */
+    margin: 0 auto var(--espaco-lg);
+    /* Centraliza o bloco na seção e dá respiro */
+    max-width: 800px;
+    /* Aumentamos um pouco para o título respirar em duas linhas no PC */
+}
+
+.locations__title {
+    font-family: var(--fonte-serif);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1.1;
+    color: var(--cor-texto);
+    margin-bottom: var(--espaco-xs);
+    margin-top: 70px;
+}
+
+.locations__subtitle {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    /* Tracking de luxo */
+    color: var(--cor-texto-muted);
+}
+
+
+.locations__title em {
+    color: var(--cor-primaria);
+    font-style: italic;
+    font-weight: 400;
+}
+
+/* --- O Grid Assimétrico --- */
+.locations__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--espaco-lg);
+    align-items: start;
+}
+
+/* A Mágica da Assimetria: Desloca a segunda coluna para baixo */
+.location-card:nth-child(even) {
+    margin-top: var(--espaco-xl);
+}
+
+/* --- Estética Boarding Pass --- */
+.location-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-left: 1px solid var(--cor-primaria);
+    /* Linha de autoridade lateral */
+    border-top: 1px solid var(--glass-border);
+    border-right: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+    border-radius: 0 20px 20px 0;
+    /* Formato de aba/ticket */
+    padding: var(--espaco-md);
+    position: relative;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.location-card__number {
+    font-family: var(--fonte-sans);
+    font-size: 0.7rem;
+    color: var(--cor-primaria);
+    letter-spacing: 0.3em;
+    display: block;
+    margin-bottom: var(--espaco-xs);
+    opacity: 0.6;
+}
+
+.location-card__name {
+    font-family: var(--fonte-serif);
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+    color: var(--cor-texto);
+}
+
+.location-card__address {
+    font-size: 0.95rem;
+    color: var(--cor-texto-muted);
+    line-height: 1.6;
+    margin-bottom: var(--espaco-md);
+    font-weight: 300;
+}
+
+/* --- Ações Minimalistas --- */
+.location-card__actions {
+    display: flex;
+    gap: 12px;
+    border-top: 1px solid rgba(191, 161, 115, 0.1);
+    padding-top: var(--espaco-sm);
+}
+
+.location-card__btn {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--cor-primaria);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.location-card__btn svg {
+    width: 18px;
+}
+
+/* Feedback Tooltip Refinado */
+.location-card__feedback {
+    position: absolute;
+    top: -35px;
+    left: 50%;
+    transform: translateX(-50%) translateY(5px);
+    background: var(--cor-primaria);
+    color: #000;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.location-card__btn--copy.is-copied .location-card__feedback {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Hover State - Luxury Feel */
+@media (hover: hover) {
+    .location-card:hover {
+        background: rgba(255, 255, 255, 0.05);
+        transform: translateX(10px);
+        /* Desliza suavemente para a direita */
+        border-left-width: 4px;
+    }
+
+    .location-card__btn:hover {
+        background: var(--cor-primaria);
+        color: #000;
+        transform: translateY(-3px);
+    }
+}
+
+/* --- Responsividade (Foco Mobile) --- */
+@media (max-width: 768px) {
+    .locations__grid {
+        grid-template-columns: 1fr;
+        gap: var(--espaco-md);
+    }
+
+    /* Remove a assimetria no mobile para salvar espaço */
+    .location-card:nth-child(even) {
+        margin-top: 0;
+    }
+
+    .location-card {
+        border-radius: 0 12px 12px 0;
+        padding: var(--espaco-sm);
+    }
+
+    .location-card:hover {
+        transform: none;
+        /* Evita comportamentos estranhos no toque */
+    }
+
+    @media (max-width: 768px) {
+        .locations__grid {
+            grid-template-columns: 1fr;
+            gap: var(--espaco-md);
+        }
+
+        /* Remove a assimetria de colunas no mobile */
+        .location-card:nth-child(even) {
+            margin-top: 0;
+        }
+
+        /* --- Centralização de Elite no Mobile --- */
+        .location-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* Centraliza os blocos (conteúdo e botões) */
+            text-align: center;
+            /* Centraliza o texto (título e endereço) */
+
+            /* Ajuste de simetria: bordas iguais em todos os lados */
+            border-radius: 20px;
+            border-left: 1px solid var(--glass-border);
+            padding: var(--espaco-md) var(--espaco-sm);
+        }
+
+        /* Garante que o número (01, 02...) também fique no meio */
+        .location-card__number {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Centraliza os botões de ação (Maps, Uber, Copy) */
+        .location-card__actions {
+            justify-content: center;
+            width: 100%;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: var(--espaco-sm);
+        }
+
+        .location-card:hover {
+            transform: none;
+            /* Desativa o deslize lateral no toque para evitar bugs */
+        }
+    }
+}
+
+.footer {
+    position: relative;
+    padding: var(--espaco-xl) 0 var(--espaco-lg);
+    background-color: #000000;
+    /* Preto Absoluto para o fechamento */
+    border-top: 1px solid rgba(191, 161, 115, 0.1);
+    /* Divisor sutil em Dourado */
+    text-align: center;
+}
+
+.footer__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--espaco-md);
+}
+
+/* 1. Assinatura Editorial */
+.footer__name {
+    font-family: var(--fonte-serif);
+    font-size: 1.8rem;
+    color: var(--cor-primaria);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+}
+
+.footer__id {
+    font-size: 0.75rem;
+    color: var(--cor-texto-muted);
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+}
+
+/* 2. Social Links */
+.footer__social {
+    display: flex;
+    gap: 24px;
+}
+
+.footer__social-link {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cor-texto);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.footer__social-link:hover {
+    color: var(--cor-primaria);
+    border-color: var(--cor-primaria);
+    transform: translateY(-2px);
+}
+
+.footer__social-link svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* 3. Micro-Tipografia Legal */
+.footer__legal {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaco-sm);
+}
+
+.footer__legal-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.footer__legal-link {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--cor-texto-muted);
+    transition: color 0.2s ease;
+}
+
+.footer__legal-link:hover {
+    color: var(--cor-texto);
+}
+
+.footer__divider {
+    color: var(--cor-detalhe);
+    font-size: 0.8rem;
+}
+
+.footer__copyright {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.3);
+    line-height: 1.6;
+}
+
+/* 4. Back to Top Geométrico */
+.footer__back-to-top {
+    position: fixed;
+    /* Ou absoluto dentro da seção se preferir fixo */
+    bottom: 30px;
+    right: 30px;
+    width: 48px;
+    height: 48px;
+    background: var(--cor-primaria);
+    color: #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    z-index: 100;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.footer__back-to-top.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.footer__back-to-top svg {
+    width: 22px;
+    height: 22px;
+}
+
+.frontlab-credit-wrapper {
+    /* Controle de Cores (Mude aqui se o site do cliente for claro/escuro) */
+    --fl-text-base: #888888;
+    /* Cor neutra do texto */
+    --fl-text-hover: #FFFFFF;
+    /* Cor de destaque ao passar o mouse (Use #000 em sites claros) */
+    --fl-accent: #D4AF37;
+    /* Seu Dourado Champagne */
+
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    /* Fontes do sistema para não pesar o site do cliente, mas mantendo a elegância */
+    font-family: 'Inter', 'Montserrat', 'Helvetica Neue', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--fl-text-base);
+    line-height: 1;
+}
+
+.fl-label {
+    opacity: 0.7;
+}
+
+.fl-signature {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--fl-text-base);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.4s ease;
+    padding-bottom: 3px;
+    /* Espaço para a linha do hover */
+}
+
+/* A Linha de Luxo que cresce no Hover */
+.fl-signature::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 1px;
+    background: var(--fl-accent);
+    transition: width 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.fl-signature:hover {
+    color: var(--fl-text-hover);
+}
+
+.fl-signature:hover::after {
+    width: 100%;
+}
+
+/* O Ponto de Luz Pulsante (Assinatura Visual) */
+.fl-dot {
+    width: 5px;
+    height: 5px;
+    background-color: var(--fl-accent);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+    animation: fl-pulse 2.5s infinite ease-in-out;
+}
+
+/* A Animação do Ponto Isolada */
+@keyframes fl-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.4;
+        transform: scale(0.8);
+    }
+}
+
+/* Tratamento para o Mobile no site do cliente */
+@media (max-width: 480px) {
+    .frontlab-credit-wrapper {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+}
+
+
+
+/* Responsividade Mobile */
+@media (max-width: 768px) {
+    .footer {
+        padding: var(--espaco-lg) 0;
+    }
+
+    .footer__back-to-top {
+        bottom: 20px;
+        right: 20px;
+    }
+}
