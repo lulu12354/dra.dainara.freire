@@ -155,7 +155,7 @@ button {
     align-items: center;
     justify-content: center;
     background-color: var(--cor-fundo);
-    /* O clip-path cria o contexto perfeito para o Parallax no mobile sem bugs de iOS */
+    /* O clip-path cria o contexto de empilhamento para o efeito parallax (desktop) */
     clip-path: inset(0 0 0 0);
 }
 
@@ -313,6 +313,21 @@ button {
 
 /* --- RESPONSIVIDADE (Mobile-Focused) --- */
 @media (max-width: 768px) {
+    .hero {
+        /* No mobile, removemos o clip-path pois não usaremos mais o position:fixed que causa o bug de zoom */
+        clip-path: none;
+    }
+
+    .hero__background-wrapper {
+        /* 
+           MUDANÇA ESTRATÉGICA (Ajuste de 3000%):
+           - Trocar para 'position: absolute' no mobile faz a imagem rolar junto com a página.
+           - Isso ELIMINA 100% o bug de "zoom" quando a barra de endereço do navegador se move.
+           - A estabilidade e fluidez agora são a prioridade, superando um efeito parallax quebrado no celular.
+        */
+        position: absolute;
+    }
+
     .hero__content {
         padding: 0 var(--espaco-sm);
         /* No celular, empurramos o bloco levemente para baixo para afastar do rosto da Doutora */
