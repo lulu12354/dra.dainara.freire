@@ -58,12 +58,22 @@ document.addEventListener('DOMContentLoaded', () => {
         audioBtn.addEventListener('click', (e) => {
             e.preventDefault();
             video.muted = !video.muted;
-            
+
+            // RE-VALIDAÇÃO DE PLAYBACK:
+            // Mesmo que o vídeo já esteja em loop, muitos navegadores exigem uma
+            // chamada `play()` dentro do mesmo evento de clique que desativa o 'muted'
+            // para permitir a reprodução com som.
+            video.play().catch(() => {
+                // Se falhar, é provável que o vídeo não tenha áudio.
+                // Silenciamos o erro para não quebrar a experiência.
+            });
+
             // rAF para evitar Layout Thrashing e garantir fluidez máxima
             requestAnimationFrame(() => {
-                const isActive = videoSection.classList.toggle('video-experience--audio-on');
-                if (statusText) statusText.textContent = isActive ? 'On' : 'Off';
-                audioBtn.setAttribute('aria-pressed', isActive);
+                const isAudioOn = !video.muted;
+                videoSection.classList.toggle('video-experience--audio-on', isAudioOn);
+                if (statusText) statusText.textContent = isAudioOn ? 'On' : 'Off';
+                audioBtn.setAttribute('aria-pressed', isAudioOn);
             });
         });
     }
