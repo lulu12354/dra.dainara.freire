@@ -5,7 +5,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const audioBtn = document.getElementById('audio-toggle');
     const statusText = document.getElementById('audio-status');
     const copyBtns = document.querySelectorAll('.location-card__btn--copy');
-
+    
+    /**
+     * Função de alta performance para agendar atualizações no DOM.
+     * Usa um 'double requestAnimationFrame' para garantir que as escritas (writes)
+     * ocorram em um frame separado das leituras (reads), evitando "Reflow Forçado".
+     * @param {Function} callback - A função que modifica o DOM.
+     */
+    const scheduleDOMUpdate = (callback) => {
+        requestAnimationFrame(() => {
+            requestAnimationFrame(callback);
+        });
+    };
+    
     // Otimização de TBT: Envolvemos tarefas não-críticas para quando o navegador estiver ocioso
     const initNonCriticalTasks = () => {
         // 2. Lógica do Vídeo (Intersection Observer para Performance)
@@ -13,12 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        requestAnimationFrame(() => videoSection.classList.add('video-experience--unveiled'));
+                        scheduleDOMUpdate(() => videoSection.classList.add('video-experience--unveiled'));
                         
-                        // Tratamento da Promise para evitar erros no console (que gastam processamento)
                         const playPromise = video.play();
                         if (playPromise !== undefined) {
-                            playPromise.catch(() => { /* Autoplay bloqueado silenciosamente */ });
+                            playPromise.catch(() => {});
                         }
                     } else {
                         video.pause();
@@ -36,10 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     const addressText = btn.getAttribute('data-address');
                     
                     navigator.clipboard.writeText(addressText).then(() => {
-                        requestAnimationFrame(() => btn.classList.add('is-copied'));
+                        scheduleDOMUpdate(() => btn.classList.add('is-copied'));
                         setTimeout(() => {
-                            requestAnimationFrame(() => btn.classList.remove('is-copied'));
-                        }, 2000);
+                            scheduleDOMUpdate(() => btn.classList.remove('is-copied'));
+                        }, 2000); // 2 segundos para o feedback visual
                     });
                 });
             });
@@ -58,22 +69,15 @@ document.addEventListener('DOMContentLoaded', () => {
         audioBtn.addEventListener('click', (e) => {
             e.preventDefault();
             video.muted = !video.muted;
-
-            // RE-VALIDAÇÃO DE PLAYBACK:
-            // Mesmo que o vídeo já esteja em loop, muitos navegadores exigem uma
-            // chamada `play()` dentro do mesmo evento de clique que desativa o 'muted'
-            // para permitir a reprodução com som.
-            video.play().catch(() => {
-                // Se falhar, é provável que o vídeo não tenha áudio.
-                // Silenciamos o erro para não quebrar a experiência.
-            });
-
-            // rAF para evitar Layout Thrashing e garantir fluidez máxima
-            requestAnimationFrame(() => {
+            
+            video.play().catch(() => {});
+            
+            // Agrupamos todas as atualizações de UI na função agendadora
+            scheduleDOMUpdate(() => {
                 const isAudioOn = !video.muted;
                 videoSection.classList.toggle('video-experience--audio-on', isAudioOn);
                 if (statusText) statusText.textContent = isAudioOn ? 'On' : 'Off';
-                audioBtn.setAttribute('aria-pressed', isAudioOn);
+                audioBtn.setAttribute('aria-pressed', String(isAudioOn));
             });
         });
     }
